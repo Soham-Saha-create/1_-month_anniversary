@@ -1,0 +1,37 @@
+{
+  "timeline": [
+    {
+      "date": "PLACEHOLDER DATE",
+      "title": "PLACEHOLDER TITLE",
+      "caption": "Write what happened here, in a line or two. Specific beats vague.",
+      "image": "assets/images/placeholder-1.jpg"
+    },
+    {
+      "date": "PLACEHOLDER DATE",
+      "title": "PLACEHOLDER TITLE",
+      "caption": "Another moment goes here.",
+      "image": "assets/images/placeholder-2.jpg"
+    },
+    {
+      "date": "PLACEHOLDER DATE",
+      "title": "PLACEHOLDER TITLE",
+      "caption": "And another.",
+      "image": "assets/images/placeholder-3.jpg"
+    }
+  ],
+  "quotes": [
+    "Replace with something funny she actually said.",
+    "Another one of her lines here.",
+    "A third one, keep them short and punchy."
+  ],
+  "letters": [
+    {
+      "heading": "for when you open this",
+      "body": "This is where the on-screen letter text goes. Keep paragraphs short so the type-on effect reads well."
+    }
+  ],
+  "finale": {
+    "heading": "PLACEHOLDER — the main message",
+    "body": "This is the big reveal text. Write it last, once everything else is done."
+  }
+}
