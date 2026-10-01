@@ -1,22 +1,40 @@
 {
   "timeline": [
     {
-      "date": "PLACEHOLDER DATE",
-      "title": "PLACEHOLDER TITLE",
-      "caption": "Write what happened here, in a line or two. Specific beats vague.",
+      "date": "the beginning",
+      "title": "Reyna and Sage, Ascent",
+      "caption": "A Valorant match. I was on Reyna, you were locking Sage. Neither of us knew that round was about to turn into a whole relationship.",
       "image": "assets/images/placeholder-1.jpg"
     },
     {
-      "date": "PLACEHOLDER DATE",
-      "title": "PLACEHOLDER TITLE",
-      "caption": "Another moment goes here.",
+      "date": "Aug 25",
+      "title": "day one",
+      "caption": "We said yes to each other for the first time.",
       "image": "assets/images/placeholder-2.jpg"
     },
     {
-      "date": "PLACEHOLDER DATE",
-      "title": "PLACEHOLDER TITLE",
-      "caption": "And another.",
+      "date": "Aug 28 - Sep 2",
+      "title": "the plot twist",
+      "caption": "You left for a week to go figure something out with an ex. It blew up spectacularly. We laugh about it now, but at the time neither of us saw that coming.",
       "image": "assets/images/placeholder-3.jpg"
+    },
+    {
+      "date": "Sep 5",
+      "title": "the real start",
+      "caption": "You made me a whole PDF. Custom fonts, backgrounds, screenshots, a video of you talking, voice notes, your own photos. An actual presentation. I don't think I stood a chance after that. This is the day we actually began.",
+      "image": "assets/images/placeholder-4.jpg"
+    },
+    {
+      "date": "a random Tuesday",
+      "title": "chocolates on Blinkit",
+      "caption": "You were on your period and I sent chocolates over on a whim. Small thing, but it's the kind of small thing that matters.",
+      "image": "assets/images/placeholder-5.jpg"
+    },
+    {
+      "date": "meeting mom",
+      "title": "introduced to your mum",
+      "caption": "You introduced me to your mum. That's not a small thing either.",
+      "image": "assets/images/placeholder-6.jpg"
     }
   ],
   "quotes": [
