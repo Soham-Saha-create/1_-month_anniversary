@@ -1,64 +1,6 @@
-document.addEventListener('DOMContentLoaded', async () => {
-  const data = await loadMemories();
-  const heading = document.getElementById('letterHeading');
-  const bodyEl = document.getElementById('letterBody');
-  const skipBtn = document.getElementById('letterSkip');
-  const prevBtn = document.getElementById('letterPrev');
-  const nextBtn = document.getElementById('letterNext');
-  const progressEl = document.getElementById('letterProgress');
-  if (!data || !bodyEl) return;
-
-  const letters = (data.letters && data.letters.length) ? data.letters : [{ heading: '', body: '' }];
-  let current = 0;
-  let typeTimer = null;
-  let done = false;
-
-  function renderLetter(idx) {
-    clearTimeout(typeTimer);
-    const letter = letters[idx];
-    if (letter.heading) heading.textContent = letter.heading;
-    if (progressEl) progressEl.textContent = letters.length > 1 ? `letter ${idx + 1} of ${letters.length}` : '';
-    if (prevBtn) prevBtn.disabled = idx === 0;
-    if (nextBtn) nextBtn.textContent = (idx === letters.length - 1) ? 'read again ↻' : 'next →';
-
-    const fullText = letter.body || '';
-    let i = 0;
-    done = false;
-    bodyEl.innerHTML = '';
-
-    function typeStep() {
-      if (i >= fullText.length) {
-        done = true;
-        bodyEl.innerHTML = fullText;
-        return;
-      }
-      bodyEl.innerHTML = fullText.slice(0, i + 1) + '<span class="cursor"></span>';
-      i++;
-      typeTimer = setTimeout(typeStep, 28);
-    }
-    typeStep();
-
-    skipBtn.onclick = () => {
-      if (!done) {
-        clearTimeout(typeTimer);
-        done = true;
-        bodyEl.innerHTML = fullText;
-      }
-    };
-  }
-
-  prevBtn?.addEventListener('click', () => {
-    if (current > 0) { current--; renderLetter(current); }
-  });
-
-  nextBtn?.addEventListener('click', () => {
-    current = (current + 1) % letters.length;
-    renderLetter(current);
-  });
-
-  renderLetter(current);
-
-  // ---------- starry parallax background ----------
+// Stars don't depend on memories.json, so they run independently —
+// a failed/slow fetch for letter content should never also kill the background.
+document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('starCanvas');
   const ctx = canvas ? canvas.getContext('2d') : null;
   if (!ctx) return;
@@ -100,4 +42,94 @@ document.addEventListener('DOMContentLoaded', async () => {
     requestAnimationFrame(draw);
   }
   requestAnimationFrame(draw);
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const lane = document.getElementById('letterLane');
+  if (!lane) return;
+
+  const data = await loadMemories();
+  if (!data) {
+    lane.innerHTML = '<p style="opacity:0.5; font-size:0.85rem;">couldn\'t load letters right now</p>';
+    return;
+  }
+
+  const letters = (data.letters && data.letters.length) ? data.letters : [{ heading: '', body: '' }];
+
+  // build one card per letter, body empty for now — typed in once scrolled into view
+  lane.innerHTML = letters.map((letter, idx) => `
+    <article class="letter-card" data-reveal data-letter-index="${idx}">
+      <p class="letter-number">letter ${idx + 1} of ${letters.length}</p>
+      <h2 class="letter-card-heading">${letter.heading || ''}</h2>
+      <p class="letter-body" data-letter-body></p>
+      <button class="letter-skip tappable" data-letter-skip>skip</button>
+    </article>
+  `).join('');
+
+  const cards = lane.querySelectorAll('.letter-card');
+  const typedState = new Map(); // idx -> { done, timer }
+
+  // main.js's scroll-reveal observer runs on DOMContentLoaded, before these
+  // cards exist (this fetch is async). Re-run reveal handling now that the
+  // cards are actually in the DOM, same fix as memories.js.
+  if ('IntersectionObserver' in window) {
+    const revealIO = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealIO.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    cards.forEach(el => revealIO.observe(el));
+  } else {
+    cards.forEach(el => el.classList.add('is-visible'));
+  }
+
+  function typeLetter(card, idx) {
+    if (typedState.get(idx)?.started) return;
+    typedState.set(idx, { started: true, done: false, timer: null });
+
+    const fullText = letters[idx].body || '';
+    const bodyEl = card.querySelector('[data-letter-body]');
+    const skipBtn = card.querySelector('[data-letter-skip]');
+    let i = 0;
+
+    function typeStep() {
+      if (i >= fullText.length) {
+        typedState.get(idx).done = true;
+        bodyEl.innerHTML = fullText;
+        return;
+      }
+      bodyEl.innerHTML = fullText.slice(0, i + 1) + '<span class="cursor"></span>';
+      i++;
+      const state = typedState.get(idx);
+      state.timer = setTimeout(typeStep, 20);
+    }
+    typeStep();
+
+    skipBtn.addEventListener('click', () => {
+      const state = typedState.get(idx);
+      if (state && !state.done) {
+        clearTimeout(state.timer);
+        state.done = true;
+        bodyEl.innerHTML = fullText;
+      }
+    });
+  }
+
+  // trigger typing when each letter card scrolls into view
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = Number(entry.target.dataset.letterIndex);
+          typeLetter(entry.target, idx);
+        }
+      });
+    }, { threshold: 0.3 });
+    cards.forEach(card => io.observe(card));
+  } else {
+    cards.forEach((card, idx) => typeLetter(card, idx));
+  }
 });
