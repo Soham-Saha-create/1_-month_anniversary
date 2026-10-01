@@ -88,6 +88,27 @@ body {
   transform: scale(0.96);
 }
 
+.quote-counter {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--pop-accent);
+  opacity: 0.7;
+  min-height: 1em;
+}
+
+.quote-hint {
+  font-size: 0.78rem;
+  opacity: 0.45;
+  margin-top: -0.5rem;
+}
+
+.confetti-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
 @keyframes pop {
   0% { transform: scale(0.9) rotate(-1deg); opacity: 0.3; }
   60% { transform: scale(1.03) rotate(0.5deg); }

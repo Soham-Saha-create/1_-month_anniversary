@@ -4,15 +4,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!data || !list) return;
 
   list.innerHTML = data.timeline.map((item, i) => `
-    <article class="memory-card" data-reveal style="transition-delay: ${Math.min(i * 90, 360)}ms">
+    <article class="memory-card tappable" data-reveal="blur-up" style="transition-delay: ${Math.min(i * 90, 360)}ms">
       <div class="memory-photo">
         <img src="${item.image}" alt="" onerror="this.parentElement.innerHTML='photo goes here'">
       </div>
       <p class="memory-date">${item.date}</p>
       <h2 class="memory-title">${item.title}</h2>
-      <p class="memory-caption">${item.caption}</p>
+      <p class="memory-caption memory-caption--clamped">${item.caption}</p>
+      <span class="memory-expand-hint">tap to read</span>
     </article>
   `).join('');
+
+  // tap to expand: toggles a class that un-clamps the caption and hides the hint
+  list.querySelectorAll('.memory-card').forEach(card => {
+    card.addEventListener('click', () => {
+      card.classList.toggle('is-expanded');
+    });
+  });
 
   // re-run scroll reveal observer now that cards exist (main.js runs on DOMContentLoaded,
   // which may fire before this async render finishes)

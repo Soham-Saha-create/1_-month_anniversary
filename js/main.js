@@ -27,37 +27,41 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ============================================
-   PAGE TRANSITIONS — fade out on nav click,
-   fade in on load. Works across every room.
+   PAGE TRANSITIONS — curtain wipe on nav click,
+   wipe-away reveal on load. Works across every room.
    ============================================ */
 (function pageTransitions() {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // fade in on load
-  document.documentElement.classList.add('page-ready');
-
   if (prefersReduced) return;
+
+  // curtain element, injected fresh on every page
+  const curtain = document.createElement('div');
+  curtain.className = 'page-curtain entering';
+  document.body.appendChild(curtain);
+  setTimeout(() => curtain.remove(), 550);
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a[href$=".html"]').forEach(link => {
       link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
-        // skip external/hash links, new tabs, modified clicks
         if (!href || link.target === '_blank' || e.metaKey || e.ctrlKey) return;
         e.preventDefault();
-        document.documentElement.classList.add('page-leaving');
-        setTimeout(() => { window.location.href = href; }, 280);
+        const leave = document.createElement('div');
+        leave.className = 'page-curtain leaving';
+        document.body.appendChild(leave);
+        setTimeout(() => { window.location.href = href; }, 420);
       });
     });
   });
 })();
 
 /* ============================================
-   CURSOR GLOW — makes .door-glow / .finale-glow
-   follow the pointer instead of sitting static.
-   No-op harmlessly if the element isn't present.
+   GLOW — makes .door-glow / .finale-glow drift.
+   Uses mouse on desktop, device tilt on phones
+   (with permission where iOS requires it), and
+   falls back to a gentle auto-drift either way.
    ============================================ */
-(function cursorGlow() {
+(function glowMotion() {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReduced) return;
 
@@ -67,27 +71,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let targetX = 50, targetY = 45, curX = 50, curY = 45;
     let raf = null;
+    let autoAngle = 0;
+    let usingInput = false;
 
-    function onMove(e) {
-      const x = (e.clientX !== undefined) ? e.clientX : window.innerWidth / 2;
-      const y = (e.clientY !== undefined) ? e.clientY : window.innerHeight / 2;
-      targetX = (x / window.innerWidth) * 100;
-      targetY = (y / window.innerHeight) * 100;
+    function setTarget(xPct, yPct) {
+      usingInput = true;
+      targetX = xPct;
+      targetY = yPct;
       if (!raf) raf = requestAnimationFrame(tick);
     }
 
     function tick() {
-      curX += (targetX - curX) * 0.08;
-      curY += (targetY - curY) * 0.08;
+      curX += (targetX - curX) * 0.05;
+      curY += (targetY - curY) * 0.05;
       glow.style.background = `radial-gradient(ellipse 60% 50% at ${curX}% ${curY}%, rgba(201, 154, 91, 0.16), transparent 70%)`;
-      if (Math.abs(targetX - curX) > 0.1 || Math.abs(targetY - curY) > 0.1) {
-        raf = requestAnimationFrame(tick);
-      } else {
-        raf = null;
-      }
+      raf = requestAnimationFrame(tick);
     }
 
-    window.addEventListener('mousemove', onMove, { passive: true });
+    // desktop: mouse
+    window.addEventListener('mousemove', (e) => {
+      setTarget((e.clientX / window.innerWidth) * 100, (e.clientY / window.innerHeight) * 100);
+    }, { passive: true });
+
+    // phone: device tilt
+    window.addEventListener('deviceorientation', (e) => {
+      if (e.gamma === null || e.beta === null) return;
+      const x = 50 + Math.max(-30, Math.min(30, e.gamma)) * 0.8;
+      const y = 45 + Math.max(-30, Math.min(30, e.beta - 45)) * 0.6;
+      setTarget(x, y);
+    }, true);
+
+    // fallback: slow auto-drift so it's never fully static, even with no input
+    raf = requestAnimationFrame(function autoTick() {
+      if (!usingInput) {
+        autoAngle += 0.004;
+        targetX = 50 + Math.sin(autoAngle) * 14;
+        targetY = 45 + Math.cos(autoAngle * 0.7) * 10;
+      }
+      curX += (targetX - curX) * 0.05;
+      curY += (targetY - curY) * 0.05;
+      glow.style.background = `radial-gradient(ellipse 60% 50% at ${curX}% ${curY}%, rgba(201, 154, 91, 0.16), transparent 70%)`;
+      raf = requestAnimationFrame(autoTick);
+    });
   });
 })();
 

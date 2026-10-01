@@ -68,22 +68,53 @@ body {
   50% { opacity: 0; }
 }
 
-.letter-skip {
-  position: absolute;
-  bottom: 0.75rem;
-  right: 1rem;
-  font-size: 0.75rem;
-  color: var(--plum);
-  opacity: 0.5;
-  transition: opacity 0.3s var(--ease);
+.letter-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 1rem;
 }
 
-.letter-skip:hover,
-.letter-skip:focus-visible {
-  opacity: 1;
+.letter-prev,
+.letter-next,
+.letter-skip {
+  font-size: 0.78rem;
+  color: var(--plum);
+  opacity: 0.7;
+  padding: 0.4rem 0.2rem;
+}
+
+.letter-prev:disabled {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.letter-skip {
+  opacity: 0.4;
+}
+
+.letter-progress {
+  font-size: 0.75rem;
+  color: var(--plum);
+  opacity: 0.6;
+  margin-top: 0.4rem;
 }
 
 .room-nav {
   background: linear-gradient(to top, var(--dusk) 60%, transparent);
   color: var(--plum-soft);
+}
+
+/* ---------- starry parallax background ---------- */
+.star-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.room {
+  position: relative;
+  z-index: 1;
 }

@@ -9,15 +9,22 @@
 </head>
 <body>
 
+<canvas id="starCanvas" class="star-canvas"></canvas>
+
 <main class="container room">
   <header class="room-header">
     <p class="room-eyebrow">room three</p>
     <h1 class="room-title" id="letterHeading">for when you open this</h1>
+    <p class="letter-progress" id="letterProgress"></p>
   </header>
 
   <div class="letter-paper">
     <p class="letter-body" id="letterBody"></p>
-    <button class="letter-skip" id="letterSkip">skip</button>
+    <div class="letter-controls">
+      <button class="letter-prev tappable" id="letterPrev">← prev</button>
+      <button class="letter-skip tappable" id="letterSkip">skip</button>
+      <button class="letter-next tappable" id="letterNext">next →</button>
+    </div>
   </div>
 </main>
 

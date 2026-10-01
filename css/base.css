@@ -131,25 +131,37 @@ img {
   white-space: nowrap;
 }
 
-/* ---------- page transitions ---------- */
-html {
-  opacity: 0;
+/* ---------- page transitions (wipe curtain, not a plain fade) ---------- */
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--void);
+  transform: translateY(100%);
+  pointer-events: none;
 }
 
-html.page-ready {
-  opacity: 1;
-  transition: opacity 0.35s var(--ease);
+.page-curtain.leaving {
+  animation: curtainIn 0.5s var(--ease) forwards;
 }
 
-html.page-leaving {
-  opacity: 0 !important;
-  transition: opacity 0.28s var(--ease);
+.page-curtain.entering {
+  animation: curtainOut 0.5s var(--ease) forwards;
+}
+
+@keyframes curtainIn {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes curtainOut {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    opacity: 1 !important;
-    transition: none !important;
+  .page-curtain {
+    display: none !important;
   }
 }
 
@@ -165,10 +177,35 @@ html.page-leaving {
   transform: translateY(0);
 }
 
+/* blur + rise variant, used on memory cards */
+[data-reveal="blur-up"] {
+  opacity: 0;
+  transform: translateY(40px);
+  filter: blur(10px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease), filter 0.8s var(--ease);
+}
+
+[data-reveal="blur-up"].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  [data-reveal] {
+  [data-reveal],
+  [data-reveal="blur-up"] {
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
     transition: none !important;
   }
+}
+
+/* ---------- tap feedback (touch-friendly, no hover needed) ---------- */
+.tappable {
+  transition: transform 0.15s var(--ease);
+}
+
+.tappable:active {
+  transform: scale(0.96);
 }
