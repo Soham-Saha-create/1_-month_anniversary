@@ -38,13 +38,44 @@ body {
   line-height: 1.15;
 }
 
-.letter-paper {
+.room-sub-letters {
+  font-size: 0.9rem;
+  color: var(--plum);
+  opacity: 0.6;
+}
+
+/* ---------- vertical scrollable lane of letter cards ---------- */
+.letter-lane {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 10vh, 5rem);
+  padding-bottom: 4rem;
+}
+
+.letter-card {
   background: var(--dusk-card);
   border-left: 2px solid var(--plum);
   padding: 2rem 1.5rem;
   border-radius: 1px;
   position: relative;
-  min-height: 12rem;
+  min-height: 10rem;
+}
+
+.letter-number {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--plum);
+  opacity: 0.55;
+  margin-bottom: 0.6rem;
+}
+
+.letter-card-heading {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.3rem, 5vw, 1.6rem);
+  margin-bottom: 1rem;
+  color: var(--plum-soft);
 }
 
 .letter-body {
@@ -68,37 +99,13 @@ body {
   50% { opacity: 0; }
 }
 
-.letter-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1.5rem;
-  gap: 1rem;
-}
-
-.letter-prev,
-.letter-next,
 .letter-skip {
-  font-size: 0.78rem;
+  position: absolute;
+  bottom: 0.75rem;
+  right: 1rem;
+  font-size: 0.72rem;
   color: var(--plum);
-  opacity: 0.7;
-  padding: 0.4rem 0.2rem;
-}
-
-.letter-prev:disabled {
-  opacity: 0.2;
-  pointer-events: none;
-}
-
-.letter-skip {
   opacity: 0.4;
-}
-
-.letter-progress {
-  font-size: 0.75rem;
-  color: var(--plum);
-  opacity: 0.6;
-  margin-top: 0.4rem;
 }
 
 .room-nav {
