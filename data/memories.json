@@ -53,13 +53,13 @@
       "question": "What car do I hate the most for being too showoff?",
       "hint": "You have a video of it on FH6",
       "options": ["Corvette C8", "Bugatti Chiron", "Dodge Challenger", "Toyota Supra"],
-      "correct": 1
+      "correct": 0
     },
     {
       "question": "Who is my favourite F1 driver?",
       "hint": "I sing his song all the time.",
       "options": ["Lewis Hamilton", "Charles Leclerc", "Lando Norris", "Max Verstappen"],
-      "correct": 2
+      "correct": 3
     },
     {
       "question": "Whose lap do I often compare you to?",
