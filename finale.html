@@ -10,10 +10,19 @@
 <body>
 
 <main class="finale">
-  <div class="finale-inner">
+  <div class="finale-inner" id="finaleInner">
     <p class="room-eyebrow">last room</p>
-    <h1 class="finale-heading" id="finaleHeading">still writing this one</h1>
-    <p class="finale-body" id="finaleBody">the ending goes here, once i figure out how to say it right.</p>
+
+    <div class="finale-gate" id="finaleGate">
+      <p class="finale-gate-line">you made it through everything.</p>
+      <button class="finale-gate-btn tappable" id="finaleGateBtn">one more thing</button>
+    </div>
+
+    <div class="finale-reveal" id="finaleReveal" hidden>
+      <h1 class="finale-heading" id="finaleHeading">still writing this one</h1>
+      <p class="finale-body" id="finaleBody">the ending goes here, once i figure out how to say it right.</p>
+      <p class="finale-signoff">month one, done. here's to the rest of them.</p>
+    </div>
   </div>
   <div class="finale-glow" aria-hidden="true"></div>
 </main>
