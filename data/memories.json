@@ -42,6 +42,44 @@
     "Another one of her lines here.",
     "A third one, keep them short and punchy."
   ],
+  "quiz": [
+    {
+      "question": "What's my dream car?",
+      "hint": "I used to drive it all the time in Forza Horizon 6",
+      "options": ["Nissan GTR R35 Skyline", "Corvette", "Lamborghini Aventador SVJ 2014", "BMW M8 CS"],
+      "correct": 0
+    },
+    {
+      "question": "What car do I hate the most for being too showoff?",
+      "hint": "You have a video of it on FH6",
+      "options": ["Corvette C8", "Bugatti Chiron", "Dodge Challenger", "Toyota Supra"],
+      "correct": 1
+    },
+    {
+      "question": "Who is my favourite F1 driver?",
+      "hint": "I sing his song all the time.",
+      "options": ["Lewis Hamilton", "Charles Leclerc", "Lando Norris", "Max Verstappen"],
+      "correct": 2
+    },
+    {
+      "question": "Whose lap do I often compare you to?",
+      "hint": "It's perfect.",
+      "options": ["Max Verstappen Storm lap", "Charles Leclerc Sunset Lap", "Ayrton Senna's The Lap of Gods", "Kimi's Suzuka final lap"],
+      "correct": 0
+    },
+    {
+      "question": "What was the day I posted my reel about you?",
+      "hint": "Your breakup with Sahil",
+      "options": ["1st September", "2nd September", "3rd September", "4th September"],
+      "correct": 1
+    },
+    {
+      "question": "What nickname do I love calling you the most?",
+      "hint": "I gave this to you before we started dating.",
+      "options": ["Jaanu", "Love", "Meri Devi", "Bhindi"],
+      "correct": 3
+    }
+  ],
   "letters": [
     {
       "heading": "for when you open this",
