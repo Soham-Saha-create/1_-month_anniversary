@@ -91,4 +91,103 @@ document.addEventListener('DOMContentLoaded', async () => {
       animId = null;
     }
   }
+
+  // ============================================
+  // QUIZ — one question at a time, hints hidden
+  // behind a tap, score + reaction at the end.
+  // ============================================
+  const quizRoot = document.getElementById('quizRoot');
+  const quiz = data.quiz;
+  if (!quizRoot || !quiz || !quiz.length) return;
+
+  let qIndex = 0;
+  let score = 0;
+  const letterIndex = (i) => String.fromCharCode(65 + i); // 0 -> A, 1 -> B...
+
+  function renderQuestion() {
+    const q = quiz[qIndex];
+    quizRoot.innerHTML = `
+      <p class="quiz-progress">question ${qIndex + 1} of ${quiz.length}</p>
+      <p class="quiz-question">${q.question}</p>
+      <div class="quiz-options">
+        ${q.options.map((opt, i) => `
+          <button class="quiz-option tappable" data-i="${i}">
+            <span class="quiz-option-letter">${letterIndex(i)}</span>
+            <span>${opt}</span>
+          </button>
+        `).join('')}
+      </div>
+      <button class="quiz-hint-btn tappable" id="quizHintBtn">need a hint?</button>
+      <p class="quiz-hint-text" id="quizHintText" hidden>${q.hint || ''}</p>
+      <p class="quiz-feedback" id="quizFeedback"></p>
+    `;
+
+    const hintBtn = quizRoot.querySelector('#quizHintBtn');
+    const hintText = quizRoot.querySelector('#quizHintText');
+    hintBtn.addEventListener('click', () => {
+      hintText.hidden = !hintText.hidden;
+      hintBtn.textContent = hintText.hidden ? 'need a hint?' : 'hide hint';
+    });
+
+    const options = quizRoot.querySelectorAll('.quiz-option');
+    let answered = false;
+
+    options.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (answered) return;
+        answered = true;
+
+        const chosen = Number(btn.dataset.i);
+        const feedback = quizRoot.querySelector('#quizFeedback');
+
+        options.forEach((b, i) => {
+          b.classList.add('locked');
+          if (i === q.correct) b.classList.add('correct');
+          else if (i === chosen) b.classList.add('wrong');
+        });
+
+        if (chosen === q.correct) {
+          score++;
+          feedback.textContent = 'yep. exactly that.';
+          feedback.classList.add('is-correct');
+        } else {
+          feedback.textContent = 'close, but no.';
+          feedback.classList.add('is-wrong');
+        }
+
+        setTimeout(() => {
+          qIndex++;
+          if (qIndex < quiz.length) {
+            renderQuestion();
+          } else {
+            renderResult();
+          }
+        }, 1100);
+      });
+    });
+  }
+
+  function renderResult() {
+    const pct = Math.round((score / quiz.length) * 100);
+    let line;
+    if (score === quiz.length) line = "perfect score. obviously.";
+    else if (score >= quiz.length - 1) line = "basically perfect. i'll allow it.";
+    else if (score >= quiz.length / 2) line = "decent. we've got some catching up to do.";
+    else line = "okay we need to talk more, clearly.";
+
+    quizRoot.innerHTML = `
+      <div class="quiz-result">
+        <p class="quiz-result-score">${score} / ${quiz.length}</p>
+        <p class="quiz-result-line">${line}</p>
+        <button class="quiz-retry tappable" id="quizRetry">try again</button>
+      </div>
+    `;
+    quizRoot.querySelector('#quizRetry').addEventListener('click', () => {
+      qIndex = 0;
+      score = 0;
+      renderQuestion();
+    });
+  }
+
+  renderQuestion();
 });
